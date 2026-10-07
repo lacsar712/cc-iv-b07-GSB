@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 import psycopg
 from psycopg.rows import dict_row
 
-from db import DSN, SCHEMA, connect
+from db import DSN, connect, init_schema
 from rules import judge
 
 
@@ -47,7 +47,7 @@ def poll_loop():
     while True:
         try:
             with connect() as conn:
-                conn.execute(SCHEMA)
+                init_schema(conn)
                 drain(conn)
                 conn.commit()
         except Exception as exc:
